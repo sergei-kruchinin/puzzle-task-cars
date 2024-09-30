@@ -2,11 +2,12 @@ import unittest
 import car_placement
 import car
 
+
 class CarTest(unittest.TestCase):
 
-    # Testing found solutions using the car_placement module, which solves the problem differently
-    # That's what it was written for
-    # Do not use it for a large number of cars (more than 15 in total)
+    # тестирование найденных решений с помощью модуля car_placement, решающего задачу по другому
+    # для этого он и был написан
+    # Не стоит использовать для большого количества машин (больших чем 15 в сумме)
     def test_in_set_by_enum(self):
         self.assertIn(car.car_placement_math(5, 5), car_placement.car_placement_enum(5, 5))
         self.assertIn(car.car_placement_math(5, 10), car_placement.car_placement_enum(5, 10))
@@ -21,23 +22,23 @@ class CarTest(unittest.TestCase):
         self.assertIn(car.car_placement_math(5, 3), car_placement.car_placement_iter(5, 3))
         self.assertIn(car.car_placement_math(5, 6), car_placement.car_placement_iter(5, 6))
 
-    # Testing invalid input values that are integers but not valid within the problem context
+    # проверки на int, но не валидные в рамках задачи значения
     def test_is_not_valid_input(self):
         self.assertIsNone(car.car_placement_math(0, 0))
         self.assertIsNone(car.car_placement_math(1, 0))
         self.assertIsNone(car.car_placement_math(-10, -10))
         self.assertIsNone(car.car_placement_math(-10, 0))
-        # Applied corrections based on the results!
+        # по итогам внесли правки!
 
-    # Are we wrong in full enumeration functions written for verification? ###
+    # А не ошиблись мы в самих функциях полного перебора, написанных для проверки? ###
     # def test_is_not_valid_for_car_placement(self):
     #     self.assertEqual(car_placement.car_placement_enum(0, 0), set())
     #     self.assertEqual(car_placement.car_placement_enum(1, 0), set())
     #     self.assertEqual(car_placement.car_placement_enum(-10, -10), set())
     #     self.assertEqual(car_placement.car_placement_enum(-10, 0), set())
-    # Added <=0 handling and calmed down for now ###
+    # добавили обработку <=0 и успокоились пока на этом ###
 
-    # Check cases where there is no solution
+    # проверка на те случаи, когда решения нет
     def test_is_none_decisions(self):
         self.assertIsNone(car.car_placement_math(1, 10))
         self.assertIsNone(car.car_placement_math(17, 8))
@@ -45,21 +46,21 @@ class CarTest(unittest.TestCase):
         self.assertIsNone(car.car_placement_math(10, 30))
         self.assertIsNone(car.car_placement_math(1, 3))
 
-    # Check (not universal) that a known solution is still output
-    # Use with caution since it provides only one value, may not match another valid solution
+    # проверка (не универсальная) на то, что известное решение по-прежнему выдается
+    # применять с осторожностью, так как дает только одно значение, может не совпадать с другим верным решением
     def test_equal_to_known_decisions(self):
-        # Here you need to consider the pattern used for generation and the ratio R >= W
+        # тут нужно учитывать паттерн, который используется в генерации и соотношение R >= W
         self.assertEqual(car.car_placement_math(1, 1), 'RW')
         self.assertEqual(car.car_placement_math(1, 2), 'WRW')
-        # Best for testing large values, which cannot be verified with car_placement
+        # больше всего подойдет для проверки больших значений, которых с car_placement не проверить
         self.assertEqual(car.car_placement_math(4, 4), 'RWRWRWRW')
         self.assertEqual(car.car_placement_math(8, 4), 'RWRRWRRWRRWR')
         self.assertEqual(car.car_placement_math(10, 10), 'RW' * 10)
         self.assertEqual(car.car_placement_math(20, 10), 'RWR' * 10)
 
-    # On some variants of correct answers. The downside is that a very large set cannot be specified,
-    # but this is for testing with car_placement, see above
-    def test_decision_in_known_decisions_sets(self):
+    # На некоторых вариантах правильных ответов. Недостаток -- сильно большое множество не задашь, но для
+    # этого тестирование с car_placement, см. выше
+    def test_desisio_in_known_decisions_sets(self):
         self.assertIn(car.car_placement_math(1, 1), {'RW', 'WR'})
         self.assertIn(car.car_placement_math(2, 2), {'RWRW', 'WRWR', 'WRRW', 'RWWR'})
         self.assertIn(car.car_placement_math(3, 5), {'WRWRWWRW', 'RWWRWWRW', 'WRWWRWRW', 'WRWWRWWR'})
@@ -67,15 +68,15 @@ class CarTest(unittest.TestCase):
             'RWWRRW', 'RWRWWR', 'WRRWRW', 'WRRWWR',
             'RWWRWR', 'WRWRRW', 'WRWRWR', 'RWRWRW'})
 
-    # Next:
-    # Tests for the count (R matches, W matches)
-    # Tests for compliance with rules (no RR or WW at the start and end, no RRR WWW in the middle)
-    # Tests for the length of the solution.
-    # They won't work if there's no solution.
-    # These tests are suitable for a very large number of cars
+    # Далее:
+    #  Проверки на подсчет (что R совпадает, W совпадает)
+    #  Проверки на соответствие правилу (нет RR или WW вначале и конце, RRR WWW в середине)
+    #  И проверки на длину решения.
+    #  Не сработают, если решения нет.
+    #  Эти проверки подойдут для очень большого количества машин
 
-    # Test that there's no RR or WW on the left
-    # Will give an error if there's no solution, solutions are assumed here
+    # Проверка, что слева нет RR или WW
+    # Если решений нет, выдаст ошибку, здесь заведомо решения есть
     def test_left_condition(self):
         self.assertNotIn(car.car_placement_math(3, 5)[0:2], {'RR', 'WW'})
         self.assertNotIn(car.car_placement_math(8, 5)[0:2], {'RR', 'WW'})
@@ -83,8 +84,8 @@ class CarTest(unittest.TestCase):
         self.assertNotIn(car.car_placement_math(8, 15)[0:2], {'RR', 'WW'})
         self.assertNotIn(car.car_placement_math(800, 815)[0:2], {'RR', 'WW'})
 
-    # Test that there's no RR or WW on the right
-    # Will give an error if there's no solution, solutions are assumed here
+    # Проверка, что справа нет RR или WW
+    # Если решений нет, выдаст ошибку, здесь заведомо решения есть
     def test_right_condition(self):
         self.assertNotIn(car.car_placement_math(3, 5)[-2:], {'RR', 'WW'})
         self.assertNotIn(car.car_placement_math(8, 5)[-2:], {'RR', 'WW'})
@@ -92,7 +93,7 @@ class CarTest(unittest.TestCase):
         self.assertNotIn(car.car_placement_math(8, 15)[-2:], {'RR', 'WW'})
         self.assertNotIn(car.car_placement_math(500, 600)[-2:], {'RR', 'WW'})
 
-    # Test that there are no three red cars in a row
+    # Проверка, что нет трех красных подряд машин
     def test_no_lonely_red_in_the_middle(self):
         self.assertEqual(car.car_placement_math(3, 5).count('RRR'), 0)
         self.assertEqual(car.car_placement_math(3, 3).count('RRR'), 0)
@@ -100,7 +101,7 @@ class CarTest(unittest.TestCase):
         self.assertEqual(car.car_placement_math(10, 15).count('RRR'), 0)
         self.assertEqual(car.car_placement_math(3000, 3020).count('RRR'), 0)
 
-    # Test that there are no three white cars in a row
+    # Проверка, что нет трех белых подряд машин
     def test_no_lonely_white_in_the_middle(self):
         self.assertEqual(car.car_placement_math(3, 5).count('WWW'), 0)
         self.assertEqual(car.car_placement_math(3, 3).count('WWW'), 0)
@@ -108,7 +109,7 @@ class CarTest(unittest.TestCase):
         self.assertEqual(car.car_placement_math(10, 15).count('WWW'), 0)
         self.assertEqual(car.car_placement_math(2000, 2100).count('WWW'), 0)
 
-    # Test that the number of red cars matches the solution
+    # Проверка, что количество красных соответствует решению
     def test_red_count(self):
         self.assertEqual(car.car_placement_math(3, 5).count('R'), 3)
         self.assertEqual(car.car_placement_math(5, 5).count('R'), 5)
@@ -116,7 +117,7 @@ class CarTest(unittest.TestCase):
         self.assertEqual(car.car_placement_math(20, 40).count('R'), 20)
         self.assertEqual(car.car_placement_math(2000, 2040).count('R'), 2000)
 
-    # Test that the number of white cars matches the solution
+    # Проверка, что количество белых соответствует решению
     def test_white_count(self):
         self.assertEqual(car.car_placement_math(3, 5).count('W'), 5)
         self.assertEqual(car.car_placement_math(4, 8).count('W'), 8)
@@ -124,7 +125,7 @@ class CarTest(unittest.TestCase):
         self.assertEqual(car.car_placement_math(15, 14).count('W'), 14)
         self.assertEqual(car.car_placement_math(2000, 2060).count('W'), 2060)
 
-    # Test that the length of the solution matches R+W
+    # Проверка, что длина решения соответствует R+W
     def test_length(self):
         self.assertEqual(len(car.car_placement_math(3, 5)), 3 + 5)
         self.assertEqual(len(car.car_placement_math(4, 8)), 4 + 8)
@@ -132,10 +133,11 @@ class CarTest(unittest.TestCase):
         self.assertEqual(len(car.car_placement_math(15, 14)), 15 + 14)
         self.assertEqual(len(car.car_placement_math(2000, 2050)), 2000 + 2050)
 
-# To run the test, you need to execute the command:
+
+# Чтобы запустить тест, нужно выполнить команду:
 # python3 -m unittest car_test.py
-# or simply:
+# или даже просто:
 # python3 car_test.py
-# thanks to the line:
+# благодаря строке:
 if __name__ == "__main__":
     unittest.main()

@@ -1,27 +1,22 @@
-# Модуль используется для автоматического тестирования в car_test.py
-# Модуль содержит три варианта функции для поиска всех решений для указанного количества красных и белых машин.
-# Модуль содержит инструмент самопроверки -- сравнение трех вариантов поиска всех решений в цикле.
-# Модуль также может использоваться источником кейсов для тестирования, ведь проще
-# сгенерировать множество решений для кейса, и проверить вручную, чем изначально составлять ручками.
-# Функции не стоит использовать для большого количества машин, примерно более чем 15 машин в сумме
+# The module is used for automatic testing in car_test.py
+# The module contains three variations of functions for finding all solutions for a given number of red and white cars.
+# The module contains a self-validation tool that compares the three variations for finding all solutions in a loop.
+# The module can also be used as a source of test cases since it is easier
+# to generate a set of solutions for a case and manually verify them rather than manually creating them initially.
+# The functions should not be used for a large number of cars, roughly more than 15 cars in total.
 
 import itertools
 import time
 import car
 
-
-#
-#
-
-
-# на выходе -- множество решений
+# output -- set of solutions
 def car_placement_iter(rc, wc):
     '''
-    Вариант перебора с использованием модуля iter
-    генерируем всевозможные варианты и выдаем только подходящие
-    :param rc: (int)  количество красных
-    :param wc: (int) количество белых
-    :return: set( str... ) множество решений или пустое множество
+    Variation of enumeration using the iter module
+    generate all possible options and yield only suitable ones
+    :param rc: (int) number of red cars
+    :param wc: (int) number of white cars
+    :return: set( str... ) set of solutions or empty set
     '''
     if rc <= 0 or wc <= 0:
         return set()
@@ -37,21 +32,20 @@ def car_placement_iter(rc, wc):
                 ('WWW' not in example)
         ):
             res.add(str(example))
-    # можно добавить единственное значение None, если пусто, но не будем пока
+    # we can add a single None value if empty, but we won't for now
     return res
 
+# Enumeration variant based on iteration over combinations of binary 0 and 1
+# The function enumerates only half of the possible solutions since the second half is obtained by inverting 0 and 1
+# iteration from 10..00 to 11..11 inclusive. This is a slightly optimized version of the car_placement_enum2 function
 
-# Вариант перебора на основе итерации по комбинациям бинарных 0 и 1
-# Функция перебирает только половину возможных решений, так как вторая половина получается инверсией 0 и 1
-# итерация от 10..00 до 11..11 включительно. Это чуть оптимизированный вариант функции car_placement_enum2
-
-# на выходе -- множество решений
+# output -- set of solutions
 def car_placement_enum(rc, wc):
     '''
 
-    :param rc: (int) количество красных машин
-    :param wc: (int) количество белых машин
-    :return: set(str... ) множество решений или пустое множество
+    :param rc: (int) number of red cars
+    :param wc: (int) number of white cars
+    :return: set( str... ) set of solutions or empty set
     '''
 
     if rc <= 0 or wc <= 0:
@@ -59,11 +53,11 @@ def car_placement_enum(rc, wc):
     res = set()
     length = rc + wc
     start_point = 1 << (length - 1)  # 100..000
-    end_point = 2 ** length  # число на единицу больше чем #111..111
+    end_point = 2 ** length  # number one greater than #111..111
     for i in range(start_point, end_point):
         example = format(i, f'#0{length + 2}b')[2:]
         if (example.count('0') == rc) or (example.count('0') == wc):
-            # если 0 совпал, то 1 проверять не надо, так как варианты идентичны
+            # if 0 matches, then 1 does not need to be checked, as the options are identical
             if (
                     not example.startswith('00') and not example.startswith('11') and
                     not example.endswith('00') and not example.endswith('11') and
@@ -71,34 +65,32 @@ def car_placement_enum(rc, wc):
             ):
                 if example.count('0') == rc:
                     res.add(example.replace('0', 'R').replace('1', 'W'))
-                    if rc == wc:  # симметричный вариант тоже добавим, когда число R==W
+                    if rc == wc:  # add a symmetric variant too, when the number of R == W
                         res.add(example.replace('1', 'R').replace('0', 'W'))
                 else:
                     res.add(example.replace('1', 'R').replace('0', 'W'))
-    # можно добавить единственное значение None, если пусто, но не будем пока
+    # we can add a single None value if empty, but we won't for now
     return res
 
 
-# Менее оптимизированный вариант перебора на основе итераций по комбинациям бинарных 0 и 1
-# Вариант осуществляет перебор всех вариантов начиная с 01..00 до 11..11 (включительно)
-# варианты ранее 01..00 (до 001..11 включительно) не проверяются так как заведомо не верные решения
+# Less optimized version of enumeration based on iteration over combinations of binary 0 and 1
+# This variant iterates over all options starting from 01..00 to 11..11 (inclusive)
+# options earlier than 01..00 (up to 001..11 inclusive) are not checked as they are obviously invalid solutions
 
-# на выходе -- множество решений
-
-
+# output -- set of solutions
 def car_placement_enum2(rc, wc):
     '''
 
-    :param rc: (int) количество красных машин
-    :param wc: (int) количество белых машин
-    :return: set(str...) множество решений (строк) или пустое множество
+    :param rc: (int) number of red cars
+    :param wc: (int) number of white cars
+    :return: set(str...) set of solutions (strings) or empty set
     '''
     if rc <= 0 or wc <= 0:
         return set()
     res = set()
     length = rc + wc
     start_point = 1 << (length - 2)  # 010..000
-    end_point = 2 ** length  # число на единицу больше чем #111..111
+    end_point = 2 ** length  # number one greater than #111..111
 
     for i in range(start_point, end_point):
         example = format(i, f'#0{length + 2}b')[2:]
@@ -113,26 +105,24 @@ def car_placement_enum2(rc, wc):
                 else:
                     res.add(example.replace('1', 'R').replace('0', 'W'))
 
-    # можно добавить единственное значение None, если пусто, но не будем пока
+    # we can add a single None value if empty, but we won't for now
     return res
 
+# Further checks of what we got (self-validation)
 
-# Далее уже проверки того, что получилось (самопроверка)
-
-
-# Функция позволяет проверить диапазон входных условий.
-# Осуществляется перебор всех вариантов каждой из трех функций перебора:
-# x1, x2 -- диапазон значений Red; y1, y2 -- диапазон значений White.
-# Если y1 == 0, то от текущего x до y2
-# show=True показывать найденные множества, show=False нет
+# The function allows checking the range of input conditions.
+# Iterates over all options of each of the three enumeration functions:
+# x1, x2 -- range of Red values; y1, y2 -- range of White values.
+# If y1 == 0, then iterate from the current x to y2
+# show=True to display the found sets, show=False to hide them
 def car_placement_compare(x1, x2, y1, y2, show=False):
     success_count = 0
     fail_count = 0
 
     for i in range(x1, x2):
-        # Если y1 == 0, то идем от i, чтобы не повторять идентичные, но инверсные расстановки
+        # If y1 == 0, iterate from i to avoid repeating identical inverted arrangements
         y1_actual = i if y1 == 0 else y1
-        for j in (y1_actual, y2):
+        for j in range(y1_actual, y2):
             print(f'R={i}, W={j}')
 
             time_start = time.perf_counter()
@@ -161,15 +151,15 @@ def car_placement_compare(x1, x2, y1, y2, show=False):
             if show:
                 print('iter:', res3)
 
-            print(f'math_len: 1, enum_len: {len(res1)}, enum2_len: {len(res2)}, iter_Len: {len(res3)}')
+            print(f'math_len: 1, enum_len: {len(res1)}, enum2_len: {len(res2)}, iter_len: {len(res3)}')
             print(f'math_time: {time0} ms, enum_time: {time1} ms, enum2_time: {time2} ms, iter_time: {time3} ms')
             res_equal = res1 == res2 == res3
             print('enum_set==enum2_set==item_set:', res_equal)
 
-            # сделаем проверку (в случае если три способа эквивалентны)
-            # а собственно входит ли найденное математически решение во множество решений?
-            # при этом если оба решения пустые (None и пустое множество)
-            # то считаем что входит (изначально не входило в задумку)
+            # check if the three methods are equivalent
+            # whether the mathematically found solution is in the set of solutions?
+            # if both solutions are empty (None and empty set)
+            # consider it as included (initially it was not considered included)
             if res_equal:
                 if (
                         (example is None and len(res1) == 0) or
@@ -184,12 +174,10 @@ def car_placement_compare(x1, x2, y1, y2, show=False):
                 fail_count += 1
     return success_count, fail_count
 
-
-# Функция служит для проверки этого модуля, используется при запуске непосредственно его как __main__
-# (main для этого модуля)
-# проверяем возможные варианты, чтобы не сильно долго
-# собственно, написано для проверки этого модуля,
-# сам же модуль необходим для car_test.py
+# The function is used to test this module when run as __main__
+# check possible options to avoid long-running tests
+# written to verify this module,
+# which is necessary for car_test.py
 
 
 def main():
@@ -206,19 +194,17 @@ def main():
     print('Fail count:', fail_count + fail_count2)
 
 
-# если запустили как
+# if run as
 # python3 car_placement.py
-# запускаем самопроверку
-
-
+# run self-validation
 if __name__ == '__main__':
     main()
 
-    # А правда ли, что 10 белых и 13 красных машин дают 4563 варианта расстановок согласно условию?
-    # Проверим
+    # Is it true that 10 white and 13 red cars produce 4563 placement options according to the condition?
+    # Let's check
     # res = car_placement_enum(10, 13)
     # c = 1
     # for i in res:
     #     print(c, i)
     #     c += 1
-    # Оказывается, правда
+    # It turns out, it's true

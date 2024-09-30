@@ -1,58 +1,57 @@
-# Решение задачи
-# Оно самодостаточно, остальные модули для тестирования
+# Problem Solution
+# It is self-contained; other modules are for testing
 
 def car_placement_math(rc, wc):
     '''
-    Функция поиска решения (только одного!) математически
+    Function to find a mathematical solution (only one!)
 
-    :param rc: (int) количество красных машин (red count)
-    :param wc: (int) количество белых машин (white count)
-    :return: (str) строка с решением или None если решения нет.
+    :param rc: (int) number of red cars (red count)
+    :param wc: (int) number of white cars (white count)
+    :return: (str) solution string or None if no solution exists.
     '''
 
-    # Сначала обработаем исключения.
-    # Символы и float вызывают ошибку,
-    # мы не будем их обрабатывать, ошибка в данном случае -- корректное поведение
+    # First, handle exceptions.
+    # Characters and floats will cause an error,
+    # we won't handle them here; an error is the correct behavior in this case.
 
-    # float можно отработать:
-    # rc,wc=int(rc),int(wc)  # Но это может привести к неожиданному поведению. Потому не будем.
+    # Floats can be handled with:
+    # rc, wc = int(rc), int(wc)  # But this could lead to unexpected behavior. So we won't.
 
-    # Как показали тесты, 0, 0 и отрицательные значения отработают и получим '' вместо None,
-    # но это неявное и не предсказуемое поведение,
-    # поэтому мы обработаем эти случаи явно
+    # Tests showed that 0, 0 and negative values are processed and '' is returned instead of None,
+    # but this is implicit and unpredictable behavior,
+    # so we will handle these cases explicitly
     if rc <= 0 or wc <= 0:
         return None
 
-    # Сначала зададим паттерны для замощения ряда символами R и W
-    if rc < wc:  # чтобы не считать дважды когда отличия во взаимной замене R и W, меняем сами паттерны замощения
+    # First, define the patterns for tiling the row with R and W symbols
+    if rc < wc:  # to avoid calculating twice when differences are in mutual replacement of R and W, we switch the tiling patterns
         rc, wc = wc, rc
-        rw = 'WR'  # паттерн когда на одну машину одного цвета приходится машина другого цвета
-        rwr = 'WRW'  # паттерн когда на одну машину одного цвета приходится две машины другого цвета
-    else:  # а тут паттерны останутся как есть
+        rw = 'WR'  # pattern when one car of one color is followed by a car of another color
+        rwr = 'WRW'  # pattern when one car of one color is followed by two cars of another color
+    else:  # here the patterns remain the same
         rw, rwr = 'RW', 'RWR'
 
-    # Вычислим вариант замощения -- поехали считать:
-    if rc == wc:  # если красных и белых одинаково: паттерн RW
+    # Calculate the tiling option -- let's start counting:
+    if rc == wc:  # if there are equal numbers of red and white cars: RW pattern
         res = rw * rc
-    elif rc == 2 * wc:  # если одних ровно в два раза больше других: паттерн RWR
+    elif rc == 2 * wc:  # if one type is exactly twice as many as the other: RWR pattern
         res = rwr * wc
-    elif rc - wc < rc / 2:  # если межу n и 2n: используем комбинацию из двух паттернов
+    elif rc - wc < rc / 2:  # if between n and 2n: use a combination of two patterns
         res = rw * (2 * wc - rc) + rwr * (rc - wc)
-    else:  # Другие варианты нам не подходят -- решения нет
+    else:  # Other options are not suitable -- no solution
         res = None
     return res
 
 
 def main():
-    # на вход два числа, красных машин X и белых Y
-    # в ответ какая-нибудь строка содержащая X -- R и Y -- W без пробелов,
-    # так, чтобы с одной машиной одного цвета рядом стояла хотя бы одна машина другого цвета
-    # важно -- находим только одно подходящее решение
-    help(car_placement_math)
-    x = int(input('Введите количество красных машин, X='))
-    y = int(input('Введите количество белых машин, Y='))
+    # input two numbers, red cars X and white cars Y
+    # the output is a string containing X -- R and Y -- W without spaces,
+    # such that with one car of one color there is at least one car of another color next to it
+    # important -- only one suitable solution is found
+    x = int(input('Enter the number of red cars, X='))
+    y = int(input('Enter the number of white cars, Y='))
     res = car_placement_math(x, y)
-    print(res if res is not None else 'Нет решения')
+    print(res if res is not None else 'No solution')
 
 
 if __name__ == '__main__':
