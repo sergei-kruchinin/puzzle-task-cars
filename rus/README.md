@@ -16,21 +16,21 @@
 ### Запуск основного скрипта
 Запустите скрипт `car.py`:
    ```sh
-   python car.py
+   python3 car.py
    ```
 
 ### Запуск тестов
 Запустите модуль для автоматического тестирования:
    ```sh
-   python car_placement.py
+   python3 car_placement.py
    ```
 Запустите модуль для юнит-тестирования:
    ```sh
-   python -m unittest car_test.py
+   python3 -m unittest car_test.py
    ```
    или просто:
    ```sh
-   python car_test.py
+   python3 car_test.py
    ```
 
 ## Использование
@@ -62,7 +62,7 @@
 #### Тестирование и самопроверка
 Запустить основные тесты и самопроверку можно, запустив `car_placement.py`:
 ```sh
-python car_placement.py
+python3 car_placement.py
 ```
 Эта команда выполнит некоторые проверки и сравнения множества решений, полученных разными методами.
 
@@ -70,11 +70,11 @@ python car_placement.py
 Этот модуль предназначен для юнит-тестирования функций.
 Для запуска тестов используйте команду:
 ```sh
-python -m unittest car_test.py
+python3 -m unittest car_test.py
 ```
 или просто:
 ```sh
-python car_test.py
+python3 car_test.py
 ```
 
 

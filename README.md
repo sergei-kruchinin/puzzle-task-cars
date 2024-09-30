@@ -7,7 +7,7 @@ The program is designed to solve the problem of placing red and white cars in a 
 - `car.py`: Main file containing the solution to the problem.
 - `car_placement.py`: Module for automated testing and finding all possible solutions.
 - `car_test.py`: Module for unit testing.
-- [rus](rus) Russian-language version
+- [rus](rus): Russian-language version
 ## How to Run
 1. Ensure you have Python 3.x installed.
 2. Download or clone the repository.
@@ -16,21 +16,21 @@ The program is designed to solve the problem of placing red and white cars in a 
 ### Running the Main Script
 Run the `car.py` script:
    ```sh
-   python car.py
+   python3 car.py
    ```
 
 ### Running Tests
 Run the automated testing module:
    ```sh
-   python car_placement.py
+   python3 car_placement.py
    ```
 Run the unit testing module:
    ```sh
-   python -m unittest car_test.py
+   python3 -m unittest car_test.py
    ```
    or simply:
    ```sh
-   python car_test.py
+   python3 car_test.py
    ```
 
 ## Usage
@@ -62,7 +62,7 @@ All these functions take the number of red and white cars and return a set of st
 #### Testing and Self-Validation
 Run the main tests and self-validation by executing `car_placement.py`:
 ```sh
-python car_placement.py
+python3 car_placement.py
 ```
 This command will perform some checks and comparisons of the sets of solutions obtained by different methods.
 
@@ -70,9 +70,9 @@ This command will perform some checks and comparisons of the sets of solutions o
 This module is intended for unit testing of functions.
 To run the tests, use the command:
 ```sh
-python -m unittest car_test.py
+python3 -m unittest car_test.py
 ```
 or simply:
 ```sh
-python car_test.py
+python3 car_test.py
 ```
